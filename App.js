@@ -24,7 +24,7 @@ export default class App extends React.Component {
         title={item.text}
         image={{uri: item.uri}}
       >
-      <Text style={{marginBottom: 10}}>Custom style baby</Text>
+      <Text style={{marginBottom: 10}}>Teste de teste que ta testando</Text>
       <Button 
         icon={{name: 'code'}}
         backgroundColor="#8ff3ee"
