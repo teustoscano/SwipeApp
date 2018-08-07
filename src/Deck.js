@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
 const SWIPE_OUT_DURATION = 250;
 
@@ -79,7 +80,7 @@ class Deck extends Component {
     const { position } = this.state;
     const rotate = position.x.interpolate({
       inputRange: [-SCREEN_WIDTH * 1.5, 0, SCREEN_WIDTH * 1.5],
-      outputRange: ['-120deg', '0deg', '120deg']
+      outputRange: ['-80deg', '0deg', '80deg']
     });
 
     return {
@@ -100,7 +101,7 @@ class Deck extends Component {
         return (
           <Animated.View
             key={item.id}
-            style={[this.getCardStyle(), styles.cardStyle, { zIndex: 99 }]}
+            style={[this.getCardStyle(), styles.cardStyle, { zIndex: 99 }, {flex: 1}]}
             {...this.state.panResponder.panHandlers}
           >
             {this.props.renderCard(item)}
@@ -111,7 +112,7 @@ class Deck extends Component {
       return (
         <Animated.View
           key={item.id}
-          style={[styles.cardStyle, { top: 10 * (i - this.state.index), zIndex: 5 }]}
+          style={[styles.cardStyle, { top: 3 * (i - this.state.index), right: 1 * (i - this.state.index), zIndex: 5 }]}
         >
           {this.props.renderCard(item)}
         </Animated.View>
@@ -131,7 +132,8 @@ class Deck extends Component {
 const styles = {
   cardStyle: {
     position: 'absolute',
-    width: SCREEN_WIDTH
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT - 180
   }
 };
 
