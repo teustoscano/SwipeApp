@@ -1,7 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, StatusBar } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 import { Card, Button } from 'react-native-elements';
 import Deck from './src/Deck';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 
 const DATA = [
@@ -28,16 +31,26 @@ const MOTIVATION = [
 
 
 export default class App extends React.Component {
+  componentDidMount(){
+    StatusBar.setHidden(true);
+  }
+
   renderCard(item){
     return(
       <Card 
         key={item.id}
         title={item.text}
         image={{uri: item.uri}}
+        featuredTitle={'Dumb motivational shit'}
         titleStyle={{fontSize:22, color:'#232931'}}
-        containerStyle={{backgroundColor:'#ededed'}}
+        containerStyle={{backgroundColor:'#ededed', height: SCREEN_HEIGHT-280}}
       >
-      <Text style={{marginBottom: 10, backgroundColor:'#ededed'}}>Here goes a good motivational phrase!</Text>
+        <Calendar
+          markedDates={
+            {'2018-08-03': {textColor: 'olive'}
+          }}
+          markingType={'period'}
+        />
       </Card>
     );
   }
@@ -81,7 +94,7 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
+    marginTop: 0,
     flex: 1,
     backgroundColor: '#232931',
   },
