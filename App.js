@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, StatusBar } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { Card, Button } from 'react-native-elements';
+import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import Deck from './src/Deck';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -58,18 +58,24 @@ export default class App extends React.Component {
   renderNoMoreCards(){
     return(
       <Card 
-        title="That's all folks!"
+        title="That's all folks!!!"
         titleStyle={{fontSize:18, color:'#232931'}}
         containerStyle={styles.containerNoMoCards}    
       >
-        <Text style={{marginBottom: 10}}>Make your future today!</Text>
-        <Button 
-          backgroundColor='#f73859'
-          title="Start a new habit!"
-          containerViewStyle={{borderRadius: 4, width: '50%'}}
-          buttonStyle={{borderRadius: 4}}
-          fontWeight={'bold'}
-        />
+        <Text style={{marginBottom: 2, textAlign: 'center', fontSize:22}}>Do something new today!</Text>
+        <View style={styles.containerNoMoCards}>
+          <FormLabel labelStyle={{fontWeight: 'bold'}}>Your new Swipe Habit name</FormLabel>
+          <FormInput containerStyle={{width: '50%', marginBottom: 32}}/>
+        </View>
+        <View style={styles.containerNoMoCards}>
+          <Button 
+            backgroundColor='#f73859'
+            title="Start a new habit!"
+            containerViewStyle={{borderRadius: 4, width: '50%'}}
+            buttonStyle={{borderRadius: 4}}
+            fontWeight={'bold'}
+          />
+        </View>
       </Card>
     );
   }
