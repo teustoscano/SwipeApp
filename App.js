@@ -8,25 +8,14 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 
 const DATA = [
-  { id: 1, text: 'Card #1', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-04.jpg' },
-  { id: 2, text: 'Card #2', uri: 'http://www.fluxdigital.co/wp-content/uploads/2015/04/Unsplash.jpg' },
-  { id: 3, text: 'Card #3', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-09.jpg' },
-  { id: 4, text: 'Card #4', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-01.jpg' },
-  { id: 5, text: 'Card #5', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-04.jpg' },
-  { id: 6, text: 'Card #6', uri: 'http://www.fluxdigital.co/wp-content/uploads/2015/04/Unsplash.jpg' },
-  { id: 7, text: 'Card #7', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-09.jpg' },
-  { id: 8, text: 'Card #8', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-01.jpg' },
-];
-
-const MOTIVATION = [
-  {id: 1, phrase: 'The tragedy in life doesn’t lie in not reaching your goal. The tragedy lies in having no goal to reach.'},
-  {id: 2, phrase: 'If you are going to achieve excellence in big things, you develop the habit in little matters. Excellence is not an exception, it is a prevailing attitude.'},
-  {id: 3, phrase: 'Don’t wait for opportunity. Create it.'},
-  {id: 4, phrase: 'The key to success is to focus on goals, not obstacles.'},
-  {id: 5, phrase: 'Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful.'},
-  {id: 6, phrase: 'Nobody can go back and start a new beginning, but anyone can start today and make a new ending.'},
-  {id: 7, phrase: 'You miss 100% of the shots you don’t take.'},
-  {id: 8, phrase: 'Don’t stop when you’re tired. Stop when you’re done.'},
+  { id: 1, text: 'Card #1', phrase: 'The tragedy in life doesn’t lie in not reaching your goal. The tragedy lies in having no goal to reach.' },
+  { id: 2, text: 'Card #2', phrase: 'If you are going to achieve excellence in big things, you develop the habit in little matters. Excellence is not an exception, it is a prevailing attitude.' },
+  { id: 3, text: 'Card #3', phrase: 'Don’t wait for opportunity. Create it.' },
+  { id: 4, text: 'Card #4', phrase: 'The key to success is to focus on goals, not obstacles.' },
+  { id: 5, text: 'Card #5', phrase: "Believe you can and you're halfway there" },
+  { id: 6, text: 'Card #6', phrase: 'Build your own dreams or someone will hire you to buid theirs.' },
+  { id: 7, text: 'Card #7', phrase: 'You miss 100% of the shots you don’t take.' },
+  { id: 8, text: 'Card #8', phrase: 'Don’t stop when you’re tired. Stop when you’re done.' },
 ];
 
 
@@ -40,16 +29,27 @@ export default class App extends React.Component {
       <Card 
         key={item.id}
         title={item.text}
-        image={{uri: item.uri}}
-        featuredTitle={'Dumb motivational shit'}
         titleStyle={{fontSize:22, color:'#232931'}}
-        containerStyle={{backgroundColor:'#ededed', height: SCREEN_HEIGHT-280}}
+        containerStyle={{backgroundColor:'#ededed', height: SCREEN_HEIGHT-190}}
       >
+      <Text style={{marginBottom: 10, textAlign:'center', fontStyle: 'italic'}}>{item.phrase}</Text>
         <Calendar
+          style={{borderWidth: 0,marginBottom: 30, borderColor: '#232931'}}
+          theme={{calendarBackground: '#ededed', arrowColor: '#232931'}}
           markedDates={
-            {'2018-08-03': {textColor: 'olive'}
+            {'2018-08-03': {
+              customStyles: {
+                container: {
+                  backgroundColor: '#f73859',
+                },
+                text: {
+                  color: '#ededed',
+                  fontWeight: 'bold',
+                },
+              },
+            },
           }}
-          markingType={'period'}
+          markingType={'custom'}
         />
       </Card>
     );
@@ -57,11 +57,18 @@ export default class App extends React.Component {
 
   renderNoMoreCards(){
     return(
-      <Card title="All Done!">
-        <Text style={{marginBottom: 10}}>There's no more content here!</Text>
+      <Card 
+        title="That's all folks!"
+        titleStyle={{fontSize:18, color:'#232931'}}
+        containerStyle={styles.containerNoMoCards}    
+      >
+        <Text style={{marginBottom: 10}}>Make your future today!</Text>
         <Button 
           backgroundColor='#f73859'
           title="Start a new habit!"
+          containerViewStyle={{borderRadius: 4, width: '50%'}}
+          buttonStyle={{borderRadius: 4}}
+          fontWeight={'bold'}
         />
       </Card>
     );
@@ -80,7 +87,7 @@ export default class App extends React.Component {
           raised
           icon={{name: 'check'}}
           backgroundColor='#f73859'
-          containerViewStyle={{marginTop: 480, borderRadius: 4, width: '50%'}}
+          containerViewStyle={{marginTop: SCREEN_HEIGHT-80, borderRadius: 4, width: '50%'}}
           buttonStyle={{borderRadius: 4}}
           fontWeight={'bold'}
           title="I made it!"
@@ -100,6 +107,12 @@ const styles = StyleSheet.create({
   },
   containerBot: {
     backgroundColor: '#232931',
+    flex: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  containerNoMoCards: {
+    backgroundColor: '#ededed',
     flex: 0,
     alignItems: 'center',
     justifyContent: 'center',
