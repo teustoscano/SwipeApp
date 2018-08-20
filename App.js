@@ -74,10 +74,16 @@ export default class App extends React.Component {
             containerViewStyle={{borderRadius: 4, width: '50%'}}
             buttonStyle={{borderRadius: 4}}
             fontWeight={'bold'}
+            onPress={this.renderNewCard}
           />
         </View>
       </Card>
     );
+  }
+
+  renderNewCard(){
+    DATA.push({id: 9, text: 'Card #9', phrase: 'SESH play will base dope stage my head.'});
+    console.log(DATA);
   }
 
   render() {
@@ -87,6 +93,7 @@ export default class App extends React.Component {
           data={DATA}
           renderCard={this.renderCard}
           renderNoMoreCards={this.renderNoMoreCards}
+          renderNewCard={this.renderNewCard}
         />
         <View style={styles.containerBot}>
         <Button 
