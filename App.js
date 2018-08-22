@@ -22,7 +22,8 @@ const DATA = [
 export default class App extends React.Component {
   constructor(props){
     super(props);
-    this.state = {habitName: ""};
+    this.state = {habitName: "",
+                  today: ""};
   }
 
   componentDidMount(){
@@ -41,8 +42,8 @@ export default class App extends React.Component {
         <Calendar
           style={{borderWidth: 0,marginBottom: 30, borderColor: '#232931'}}
           theme={{calendarBackground: '#ededed', arrowColor: '#232931'}}
-          markedDates={
-            {'2018-08-03': {
+          markedDates=
+            {this.state.today: {
               customStyles: {
                 container: {
                   backgroundColor: '#f73859',
@@ -90,6 +91,17 @@ export default class App extends React.Component {
     console.log(this.state.habitName);
     DATA.push({id: 9, text: this.state.habitName, phrase: 'SESH play will base dope stage my head.'});
     console.log(DATA);
+    this.forceUpdate();
+  }
+
+  markDownDay(){
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    var day = date + "-" + month + "-" + year;
+    
+    this.setState({today: day});
+    console.log(this.state.today);
   }
 
   render() {
@@ -110,8 +122,9 @@ export default class App extends React.Component {
           buttonStyle={{borderRadius: 4}}
           fontWeight={'bold'}
           title="I made it!"
+          onPress={this.markDownDay.bind(this)}
         />
-      </View>
+        </View>
       </View>
       
     );
