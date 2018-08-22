@@ -20,6 +20,11 @@ const DATA = [
 
 
 export default class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {habitName: ""};
+  }
+
   componentDidMount(){
     StatusBar.setHidden(true);
   }
@@ -65,7 +70,7 @@ export default class App extends React.Component {
         <Text style={{marginBottom: 2, textAlign: 'center', fontSize:22}}>Do something new today!</Text>
         <View style={styles.containerNoMoCards}>
           <FormLabel labelStyle={{fontWeight: 'bold'}}>Your new Swipe Habit name</FormLabel>
-          <FormInput containerStyle={{width: '50%', marginBottom: 32}}/>
+          <FormInput onChangeText={(text) => this.setState({habitName: text})} containerStyle={{width: '50%', marginBottom: 32}}/>
         </View>
         <View style={styles.containerNoMoCards}>
           <Button 
@@ -74,7 +79,7 @@ export default class App extends React.Component {
             containerViewStyle={{borderRadius: 4, width: '50%'}}
             buttonStyle={{borderRadius: 4}}
             fontWeight={'bold'}
-            onPress={this.renderNewCard}
+            onPress={this.renderNewCard.bind(this)}
           />
         </View>
       </Card>
@@ -82,7 +87,8 @@ export default class App extends React.Component {
   }
 
   renderNewCard(){
-    DATA.push({id: 9, text: 'Card #9', phrase: 'SESH play will base dope stage my head.'});
+    console.log(this.state.habitName);
+    DATA.push({id: 9, text: this.state.habitName, phrase: 'SESH play will base dope stage my head.'});
     console.log(DATA);
   }
 
@@ -92,7 +98,7 @@ export default class App extends React.Component {
         <Deck 
           data={DATA}
           renderCard={this.renderCard}
-          renderNoMoreCards={this.renderNoMoreCards}
+          renderNoMoreCards={this.renderNoMoreCards.bind(this)}
           renderNewCard={this.renderNewCard}
         />
         <View style={styles.containerBot}>
