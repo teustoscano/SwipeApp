@@ -1,4 +1,5 @@
 import React from 'react';
+import { SQLite } from 'expo';
 import { StyleSheet, Text, View, Dimensions, StatusBar } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
@@ -6,6 +7,7 @@ import Deck from './src/Deck';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
+const db = SQLite.openDatabase('db.db');
 
 const DATA = [
   { id: 1, text: 'Card #1', phrase: 'The tragedy in life doesn’t lie in not reaching your goal. The tragedy lies in having no goal to reach.' },
@@ -23,7 +25,8 @@ export default class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {habitName: "",
-                  today: ""};
+                  markedData: ['2018-08-09', '2018-08-14'],
+                };
   }
 
   componentDidMount(){
@@ -31,6 +34,10 @@ export default class App extends React.Component {
   }
 
   renderCard(item){
+    let dates = {};
+    this.state.markedData.forEach((val) => {
+      dates[val] = {selected: true, marked: true};
+    });
     return(
       <Card 
         key={item.id}
@@ -42,19 +49,7 @@ export default class App extends React.Component {
         <Calendar
           style={{borderWidth: 0,marginBottom: 30, borderColor: '#232931'}}
           theme={{calendarBackground: '#ededed', arrowColor: '#232931'}}
-          markedDates=
-            {this.state.today: {
-              customStyles: {
-                container: {
-                  backgroundColor: '#f73859',
-                },
-                text: {
-                  color: '#ededed',
-                  fontWeight: 'bold',
-                },
-              },
-            },
-          }}
+          markedDates={dates}
           markingType={'custom'}
         />
       </Card>
@@ -95,13 +90,15 @@ export default class App extends React.Component {
   }
 
   markDownDay(){
-    var date = new Date().getDate();
+    /*var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
-    var day = date + "-" + month + "-" + year;
-    
-    this.setState({today: day});
-    console.log(this.state.today);
+    var day = year + "-" + month + "-" + date;*/
+    var day = (new Date()).toISOString().split("T")[0];
+    let joined = this.state.markedData.concat(day);
+    this.setState({markedData: joined});
+    console.log(this.state.markedData);
+    return day;
   }
 
   render() {
@@ -109,7 +106,7 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <Deck 
           data={DATA}
-          renderCard={this.renderCard}
+          renderCard={this.renderCard.bind(this)}
           renderNoMoreCards={this.renderNoMoreCards.bind(this)}
           renderNewCard={this.renderNewCard}
         />
