@@ -36,7 +36,7 @@ export default class App extends React.Component {
   renderCard(item){
     let dates = {};
     this.state.markedData.forEach((val) => {
-      dates[val] = {selected: true, marked: true};
+      dates[val] = {selected: true, marked: true, customStyles:{ container: { backgroundColor: '#f73859' }, text:{ color: '#ededed', fontWeight: 'bold'}}  };
     });
     return(
       <Card 
