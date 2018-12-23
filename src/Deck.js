@@ -133,7 +133,7 @@ const styles = {
   cardStyle: {
     position: 'absolute',
     width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT - 180
+    height: SCREEN_HEIGHT - 100
   }
 };
 
