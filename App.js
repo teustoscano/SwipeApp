@@ -1,32 +1,44 @@
 import React from 'react';
-import { SQLite } from 'expo';
-import { StyleSheet, Text, View, Dimensions, StatusBar } from 'react-native';
+import db from './src/config';
+import { StyleSheet, Text, View, Dimensions, StatusBar, AsyncStorage } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import Deck from './src/Deck';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-const db = SQLite.openDatabase('db.db');
-
-const DATA = [
-  { id: 1, text: 'Card #1', phrase: 'The tragedy in life doesn’t lie in not reaching your goal. The tragedy lies in having no goal to reach.' },
-  { id: 2, text: 'Card #2', phrase: 'If you are going to achieve excellence in big things, you develop the habit in little matters. Excellence is not an exception, it is a prevailing attitude.' },
-  { id: 3, text: 'Card #3', phrase: 'Don’t wait for opportunity. Create it.' },
-  { id: 4, text: 'Card #4', phrase: 'The key to success is to focus on goals, not obstacles.' },
-  { id: 5, text: 'Card #5', phrase: "Believe you can and you're halfway there" },
-  { id: 6, text: 'Card #6', phrase: 'Build your own dreams or someone will hire you to buid theirs.' },
-  { id: 7, text: 'Card #7', phrase: 'You miss 100% of the shots you don’t take.' },
-  { id: 8, text: 'Card #8', phrase: 'Don’t stop when you’re tired. Stop when you’re done.' },
-];
+// const DATA = [
+//   { id: 1, text: 'Card #1', phrase: 'The tragedy in life doesn’t lie in not reaching your goal. The tragedy lies in having no goal to reach.' },
+//   { id: 2, text: 'Card #2', phrase: 'If you are going to achieve excellence in big things, you develop the habit in little matters. Excellence is not an exception, it is a prevailing attitude.' },
+//   { id: 3, text: 'Card #3', phrase: 'Don’t wait for opportunity. Create it.' },
+//   { id: 4, text: 'Card #4', phrase: 'The key to success is to focus on goals, not obstacles.' },
+//   { id: 5, text: 'Card #5', phrase: "Believe you can and you're halfway there" },
+//   { id: 6, text: 'Card #6', phrase: 'Build your own dreams or someone will hire you to buid theirs.' },
+//   { id: 7, text: 'Card #7', phrase: 'You miss 100% of the shots you don’t take.' },
+//   { id: 8, text: 'Card #8', phrase: 'Don’t stop when you’re tired. Stop when you’re done.' },
+// ];
 
 
 export default class App extends React.Component {
   constructor(props){
     super(props);
-    this.state = {habitName: "",
-                  markedData: ['2018-08-09', '2018-08-14'],
-                };
+    this.state = {
+      habits: [], 
+      markedData: ['2018-12-12']
+    };
+  }
+
+  componentWillMount(){
+    firebase.firestore().collection('habits').get().then((snapshot) => {
+      let habitos = []
+      snapshot.docs.forEach( doc => {
+        console.log(doc.data())
+        habitos = [...habitos, doc.data()]
+      })
+      this.setState({ habits: habitos })
+    })
   }
 
   componentDidMount(){
@@ -34,14 +46,14 @@ export default class App extends React.Component {
   }
 
   renderCard(item){
-    let dates = {};
-    this.state.markedData.forEach((val) => {
-      dates[val] = {selected: true, marked: true, customStyles:{ container: { backgroundColor: '#f73859' }, text:{ color: '#ededed', fontWeight: 'bold'}}  };
+    let marked = {};
+    item.dates.forEach((val) => {
+      marked[val] = {selected: true, marked: true, customStyles:{ container: { backgroundColor: '#f73859' }, text:{ color: '#ededed', fontWeight: 'bold'}}  };
     });
     return(
       <Card 
         key={item.id}
-        title={item.text}
+        title={item.title}
         titleStyle={{fontSize:22, color:'#232931'}}
         containerStyle={{backgroundColor:'#ededed', height: SCREEN_HEIGHT-190}}
       >
@@ -49,7 +61,7 @@ export default class App extends React.Component {
         <Calendar
           style={{borderWidth: 0,marginBottom: 30, borderColor: '#232931'}}
           theme={{calendarBackground: '#ededed', arrowColor: '#232931'}}
-          markedDates={dates}
+          markedDates={marked}
           markingType={'custom'}
         />
       </Card>
@@ -83,9 +95,6 @@ export default class App extends React.Component {
   }
 
   renderNewCard(){
-    console.log(this.state.habitName);
-    DATA.push({id: 9, text: this.state.habitName, phrase: 'SESH play will base dope stage my head.'});
-    console.log(DATA);
     this.forceUpdate();
   }
 
@@ -97,15 +106,21 @@ export default class App extends React.Component {
     var day = (new Date()).toISOString().split("T")[0];
     let joined = this.state.markedData.concat(day);
     this.setState({markedData: joined});
-    console.log(this.state.markedData);
+    console.log('Marked Data', this.state.markedData);
     return day;
   }
 
+  saveData(){
+    let data = this.state.markedData;
+    AsyncStorage.setItem('markedData', data);
+  }
+
   render() {
+    const { habits } = this.state
     return (
       <View style={styles.container}>
         <Deck 
-          data={DATA}
+          data={habits}
           renderCard={this.renderCard.bind(this)}
           renderNoMoreCards={this.renderNoMoreCards.bind(this)}
           renderNewCard={this.renderNewCard}
